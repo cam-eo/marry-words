@@ -1,13 +1,13 @@
+import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
-
-const Stack = createStackNavigator();
-
 import Home from "./components/Home";
 import JoinGame from "./components/JoinGame";
 import StartGame from "./components/StartGame";
 import Gameplay from "./components/Gameplay";
+import { signInAnonymously } from "firebase/auth";
+import { auth } from "./firebase";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,6 +15,8 @@ export default function App() {
     "Kalam-Light": require("./assets/fonts/Kalam-Light.ttf"),
     "Kalam-Regular": require("./assets/fonts/Kalam-Regular.ttf"),
   });
+
+  const Stack = createStackNavigator();
 
   const linking = {
     config: {
@@ -26,6 +28,21 @@ export default function App() {
       },
     },
   };
+
+  useEffect(() => {
+    signInAnonymously(auth)
+      .then((user) => {
+        // Signed in..
+
+        console.log("user", user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ...
+        console.log("ERROR: ", { errorCode, errorMessage });
+      });
+  }, []);
 
   return (
     <NavigationContainer linking={linking}>

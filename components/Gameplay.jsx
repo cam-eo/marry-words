@@ -15,7 +15,7 @@ export default function Gameplay({ navigation }) {
 
   const countDownDate = new Date() - 60 * 1000;
 
-  console.log("countDownDate: ", countDownDate.toISOString());
+  // console.log("countDownDate: ", countDownDate.toISOString());
 
   return (
     <LinearGradient

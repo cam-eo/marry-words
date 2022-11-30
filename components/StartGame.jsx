@@ -1,12 +1,30 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput } from "./TextInput";
 import { Text } from "./Text";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme";
 import { Button } from "./Button";
+import { db } from "../firebase";
 
 export default function StartGame({ navigation }) {
+  const [name, setName] = useState("");
+  // function start() {
+  //   set(ref(db, "users/" + userId), {
+  //     name,
+  //     gameMaster: true,
+  //   });
+
+  //   set(ref(db, "sessions/"), {
+  //     name,
+  //     gameMaster: true,
+  //   });
+
+  //   navigation.navigate("Gameplay");
+  // }
+
+  console.log("name: ", name);
+
   return (
     <LinearGradient
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
@@ -22,6 +40,8 @@ export default function StartGame({ navigation }) {
           color: "#FFF",
           textAlign: "center",
         }}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <Text>Share this code with your friends</Text>
       {/* *npm install --save @react-native-clipboard/clipboard */}
@@ -43,10 +63,7 @@ export default function StartGame({ navigation }) {
       <Text>Shandre</Text>
       <Text>Roche</Text>
       <Text>Mendes</Text>
-      <Button
-        textStyles={{ color: "#FFF" }}
-        onPress={() => navigation.navigate("Gameplay")}
-      >
+      <Button textStyles={{ color: "#FFF" }} onPress={() => start()}>
         Start
       </Button>
     </LinearGradient>
