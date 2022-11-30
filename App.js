@@ -1,13 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { useFonts } from "expo-font";
 
 const Stack = createStackNavigator();
 
@@ -17,8 +10,25 @@ import StartGame from "./components/StartGame";
 import Gameplay from "./components/Gameplay";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Kalam-Bold": require("./assets/fonts/Kalam-Bold.ttf"),
+    "Kalam-Light": require("./assets/fonts/Kalam-Light.ttf"),
+    "Kalam-Regular": require("./assets/fonts/Kalam-Regular.ttf"),
+  });
+
+  const linking = {
+    config: {
+      screens: {
+        Home: "/",
+        StartGame: "start",
+        JoinGame: "join",
+        Gameplay: "play",
+      },
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"

@@ -1,19 +1,27 @@
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
+import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "../theme";
+
+import { Text } from "./Text";
+import { TextInput } from "./TextInput";
 
 export default function Gameplay({ navigation }) {
   const myTurn = true;
   const waitingForWord = false;
   // const myTurnComplete = false;
   const [myTurnComplete, setMyTurnComplete] = useState(false);
+
+  const countDownDate = new Date() - 60 * 1000;
+
+  console.log("countDownDate: ", countDownDate.toISOString());
+
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
+      style={styles.container}
+    >
       {myTurn ? (
         <>
           {myTurnComplete ? (
@@ -70,16 +78,13 @@ export default function Gameplay({ navigation }) {
           )}
         </View>
       )}
-      {/* <TextInput style={styles.input} />
-      <TouchableOpacity style={styles.button}>Submit Word</TouchableOpacity> */}
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
     minWidth: "200px",
@@ -91,9 +96,7 @@ const styles = StyleSheet.create({
   typeography: {
     color: "#FFF",
   },
-  input: {
-    backgroundColor: "#FFF",
-  },
+  input: {},
 });
 
 // Idea: Pick a winner and loser or only winner? maybe a setting

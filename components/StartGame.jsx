@@ -1,27 +1,55 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { TextInput } from "./TextInput";
+import { Text } from "./Text";
+import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "../theme";
+import { Button } from "./Button";
 
 export default function StartGame({ navigation }) {
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
+      style={styles.container}
+    >
+      <Text>What is your name</Text>
+      <TextInput
+        styles={{
+          width: "100%",
+          maxWidth: 300,
+          fontSize: 24,
+          padding: 8,
+          color: "#FFF",
+          textAlign: "center",
+        }}
+      />
       <Text>Share this code with your friends</Text>
-      <Text>---CODE---</Text>
+      {/* *npm install --save @react-native-clipboard/clipboard */}
+      <TouchableOpacity style={{ width: "100%", maxWidth: 300 }}>
+        <TextInput
+          styles={{
+            width: "100%",
+            fontSize: 24,
+            padding: 8,
+            color: "#FFF",
+            textAlign: "center",
+          }}
+          value={"---CODE---"}
+          disabled
+        />
+      </TouchableOpacity>
+
       <Text>Players:</Text>
       <Text>Shandre</Text>
       <Text>Roche</Text>
       <Text>Mendes</Text>
-      <TouchableOpacity
-        style={styles.button}
+      <Button
+        textStyles={{ color: "#FFF" }}
         onPress={() => navigation.navigate("Gameplay")}
       >
-        START
-      </TouchableOpacity>
-    </View>
+        Start
+      </Button>
+    </LinearGradient>
   );
 }
 
@@ -43,9 +71,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minWidth: "200px",
     width: "100%",
-  },
-  button: {
-    backgroundColor: "#123456",
   },
   typeography: {
     color: "#FFF",
