@@ -12,6 +12,8 @@ import {
 const Stack = createStackNavigator();
 
 import Home from "./components/Home";
+import JoinGame from "./components/JoinGame";
+import StartGame from "./components/StartGame";
 import Gameplay from "./components/Gameplay";
 
 export default function App() {
@@ -22,6 +24,16 @@ export default function App() {
           name="Home"
           component={Home}
           options={{ title: "Home", headerShown: false }}
+        />
+        <Stack.Screen
+          name="StartGame"
+          component={StartGame}
+          options={{ title: "Start", headerShown: false }}
+        />
+        <Stack.Screen
+          name="JoinGame"
+          component={JoinGame}
+          options={{ title: "Join", headerShown: false }}
         />
         <Stack.Screen
           name="Gameplay"
