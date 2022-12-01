@@ -7,6 +7,7 @@ interface Props {
   weight?: "Bold" | "Regular" | "Light";
   styles?: Object;
   textStyles?: Object;
+  onPress: () => void;
 }
 
 export const Button: FC<Props> = ({
@@ -14,6 +15,7 @@ export const Button: FC<Props> = ({
   weight = "Regular",
   styles,
   textStyles,
+  onPress,
   ...rest
 }) => {
   const internalStyles = {
@@ -22,15 +24,16 @@ export const Button: FC<Props> = ({
     justifyContent: "center",
     width: 200,
     maxHeight: 100,
+    borderRadius: 16,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     border: "1px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: 16,
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer",
     ...styles,
   };
 
   return (
-    <TouchableOpacity style={internalStyles} {...rest}>
+    <TouchableOpacity style={internalStyles} {...rest} onPress={onPress}>
       <Text weight={weight} styles={textStyles}>
         {children}
       </Text>

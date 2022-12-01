@@ -1,10 +1,36 @@
+import { useEffect } from "react";
+
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "./Text";
 import { colors } from "../theme";
 
+import { signInAnonymously } from "firebase/auth";
+import { auth } from "../firebase";
+import { useStoreValue } from "../store";
+
 export default function Home({ navigation }) {
+  const [, dispatch] = useStoreValue();
+
+  useEffect(() => {
+    signInAnonymously(auth)
+      .then((authResponse) => {
+        dispatch({
+          type: "SET_USER",
+          user: {
+            uid: authResponse.user.uid,
+          },
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ...
+        console.log("ERROR: ", { errorCode, errorMessage });
+      });
+  }, []);
+
   return (
     <LinearGradient
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}

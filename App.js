@@ -1,13 +1,14 @@
-import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import Home from "./components/Home";
 import JoinGame from "./components/JoinGame";
-import StartGame from "./components/StartGame";
+import { StartGame } from "./components/StartGame";
+import WaitingForPlayers from "./components/WaitingForPlayers";
+import { WaitingToStart } from "./components/WaitingToStart";
+
 import Gameplay from "./components/Gameplay";
-import { signInAnonymously } from "firebase/auth";
-import { auth } from "./firebase";
+import { StoreProvider, initialState, reducer } from "./store";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,52 +23,51 @@ export default function App() {
     config: {
       screens: {
         Home: "/",
-        StartGame: "start",
-        JoinGame: "join",
-        Gameplay: "play",
+        StartGame: "/start",
+        WaitingForPlayers: "/waiting-for-players",
+        WaitingToStart: "waiting-to-start",
+        JoinGame: "/join",
+        Gameplay: "/play",
       },
     },
   };
 
-  useEffect(() => {
-    signInAnonymously(auth)
-      .then((user) => {
-        // Signed in..
-
-        console.log("user", user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ...
-        console.log("ERROR: ", { errorCode, errorMessage });
-      });
-  }, []);
-
   return (
-    <NavigationContainer linking={linking}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ title: "Home", headerShown: false }}
-        />
-        <Stack.Screen
-          name="StartGame"
-          component={StartGame}
-          options={{ title: "Start", headerShown: false }}
-        />
-        <Stack.Screen
-          name="JoinGame"
-          component={JoinGame}
-          options={{ title: "Join", headerShown: false }}
-        />
-        <Stack.Screen
-          name="Gameplay"
-          component={Gameplay}
-          options={{ title: "Play", headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <StoreProvider initialState={initialState} reducer={reducer}>
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ title: "Home", headerShown: false }}
+          />
+          <Stack.Screen
+            name="StartGame"
+            component={StartGame}
+            options={{ title: "Start", headerShown: false }}
+          />
+          <Stack.Screen
+            name="WaitingForPlayers"
+            component={WaitingForPlayers}
+            options={{ title: "WaitingForPlayers", headerShown: false }}
+          />
+          <Stack.Screen
+            name="WaitingToStart"
+            component={WaitingToStart}
+            options={{ title: "WaitingToStart", headerShown: false }}
+          />
+          <Stack.Screen
+            name="JoinGame"
+            component={JoinGame}
+            options={{ title: "Join", headerShown: false }}
+          />
+          <Stack.Screen
+            name="Gameplay"
+            component={Gameplay}
+            options={{ title: "Play", headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StoreProvider>
   );
 }

@@ -26,6 +26,5 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 export const db = getDatabase(app);
 export const auth = getAuth();
-// export const signIn = signInAnonymously();
 
 // probs gotta setup env variables https://medium.com/swlh/how-to-properly-use-environment-variables-in-an-expo-react-native-app-7ab852590b30#:~:text=An%20environment%20variable%20is%20a,to%20be%20imported%20at%20all.

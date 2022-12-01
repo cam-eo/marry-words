@@ -1,51 +1,59 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Animated } from "react-native";
 import { useEffect, useState } from "react";
+import Clipboard from "@react-native-clipboard/clipboard";
+import { LinearGradient } from "expo-linear-gradient";
 import { TextInput } from "./TextInput";
 import { Text } from "./Text";
-import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme";
 import { Button } from "./Button";
-import { db } from "../firebase";
+import { useStoreValue } from "../store";
 
-export default function StartGame({ navigation }) {
-  const [name, setName] = useState("");
-  // function start() {
-  //   set(ref(db, "users/" + userId), {
-  //     name,
-  //     gameMaster: true,
-  //   });
+export default function WaitingForPlayers() {
+  const [state, dispatch] = useStoreValue();
+  const [fadeAnim] = useState(new Animated.Value(0));
 
-  //   set(ref(db, "sessions/"), {
-  //     name,
-  //     gameMaster: true,
-  //   });
-
-  //   navigation.navigate("Gameplay");
-  // }
-
-  console.log("name: ", name);
+  function copyCode() {
+    Clipboard.setString(state.sessionId);
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 1000,
+      }),
+    ]).start();
+  }
 
   return (
     <LinearGradient
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text>What is your name</Text>
-      <TextInput
-        styles={{
+      <Text>Share this code with your friends</Text>
+      <TouchableOpacity
+        style={{
+          position: "relative",
           width: "100%",
           maxWidth: 300,
-          fontSize: 24,
-          padding: 8,
-          color: "#FFF",
-          textAlign: "center",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Text>Share this code with your friends</Text>
-      {/* *npm install --save @react-native-clipboard/clipboard */}
-      <TouchableOpacity style={{ width: "100%", maxWidth: 300 }}>
+        onPress={copyCode}
+      >
+        <Animated.View
+          style={{
+            position: "absolute",
+            zIndex: 2,
+            opacity: fadeAnim,
+          }}
+        >
+          <Text>Copied</Text>
+        </Animated.View>
+
         <TextInput
           styles={{
             width: "100%",
@@ -54,11 +62,10 @@ export default function StartGame({ navigation }) {
             color: "#FFF",
             textAlign: "center",
           }}
-          value={"---CODE---"}
+          value={state.sessionId}
           disabled
         />
       </TouchableOpacity>
-
       <Text>Players:</Text>
       <Text>Shandre</Text>
       <Text>Roche</Text>
@@ -96,3 +103,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
 });
+
+/**
+ * {
+ *    sessions: {
+ *      uid: dewvervbadbvdzf,
+ *      users: {
+ *         userUid: {
+ *            name: "Cam",
+ *            score: 0,
+ *            wordInPlay: "Hello"
+ *         }
+ *      },
+ *      wordInPlay: "Goodbye",
+ *      previousWords: {
+ *
+ *      }
+ *    }
+ * }
+ *
+ */

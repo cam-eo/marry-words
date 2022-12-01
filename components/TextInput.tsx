@@ -2,15 +2,17 @@ import { FC } from "react";
 import { TextInput as ReactNativeTextInput } from "react-native";
 
 interface Props {
-  children: string;
   weight?: "Bold" | "Regular" | "Light";
   styles?: Object;
+  value: string;
+  onChange: (_e: any) => void;
 }
 
 export const TextInput: FC<Props> = ({
-  children,
   weight = "Regular",
   styles,
+  value,
+  onChange,
   ...rest
 }) => {
   const internalStyles = {
@@ -21,8 +23,11 @@ export const TextInput: FC<Props> = ({
   };
 
   return (
-    <ReactNativeTextInput style={internalStyles} {...rest}>
-      {children}
-    </ReactNativeTextInput>
+    <ReactNativeTextInput
+      style={internalStyles}
+      value={value}
+      onChange={onChange}
+      {...rest}
+    />
   );
 };

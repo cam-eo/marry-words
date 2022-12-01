@@ -7,6 +7,13 @@ import { TextInput } from "./TextInput";
 import { Button } from "./Button";
 
 export default function JoinGame({ navigation }) {
+  function onSubmit() {
+    // Add this user to the session
+
+    // Error Message on no SessionId Available
+    navigation.navigate("WaitingToStart");
+  }
+
   return (
     <LinearGradient
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
@@ -16,11 +23,7 @@ export default function JoinGame({ navigation }) {
       <TextInput styles={styles.input} />
       <Text styles={styles.typeography}>What is your name?</Text>
       <TextInput styles={styles.input} />
-      <Button
-      // onPress={() => navigation.navigate("Gameplay")}
-      >
-        Join
-      </Button>
+      <Button onPress={onSubmit}>Join</Button>
     </LinearGradient>
   );
 }
