@@ -1,17 +1,52 @@
 // one you select to join, lets make a space til the main player starts
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme";
 import { StyleSheet } from "react-native";
+import { Text } from "./Text";
+import { onValue, ref } from "firebase/database";
+import { db } from "../firebase";
+import { useStoreValue } from "../store";
+import { Navigation } from "../types";
 
-interface Props {}
+interface Props {
+  navigation: Navigation;
+}
 
-export const WaitingToStart: FC<Props> = () => {
+export const WaitingToStart: FC<Props> = ({ navigation }) => {
+  const [state] = useStoreValue();
+  const [players, setPlayers] = useState();
+  const [sessionStarted, setSessionStarted] = useState(false);
+  useEffect(() => {
+    const playersRef = ref(db, `sessions/${state.sessionId}/players`);
+    onValue(playersRef, (playersResponse) => {
+      setPlayers(playersResponse.val());
+    });
+    const sessionStartedRef = ref(db, `sessions/${state.sessionId}/started`);
+
+    onValue(sessionStartedRef, (sessionStartedResponse) => {
+      setSessionStarted(sessionStartedResponse.val());
+    });
+  }, []);
+
+  useEffect(() => {
+    if (sessionStarted) {
+      navigation.navigate("Gameplay");
+    }
+  }, [sessionStarted]);
+
   return (
     <LinearGradient
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
-    ></LinearGradient>
+    >
+      <Text>Waiting for host to start</Text>
+      <Text>Players:</Text>
+      {players &&
+        Object.keys(players).map((key) => (
+          <Text key={key}>{players[key].name}</Text>
+        ))}
+    </LinearGradient>
   );
 };
 

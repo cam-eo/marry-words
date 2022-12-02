@@ -7,10 +7,20 @@ import { Text } from "./Text";
 import { colors } from "../theme";
 import { Button } from "./Button";
 import { useStoreValue } from "../store";
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase";
 
 export default function WaitingForPlayers() {
   const [state, dispatch] = useStoreValue();
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [players, setPlayers] = useState();
+
+  useEffect(() => {
+    const playersRef = ref(db, `sessions/${state.sessionId}/players`);
+    onValue(playersRef, (playersResponse) => {
+      setPlayers(playersResponse.val());
+    });
+  }, []);
 
   function copyCode() {
     Clipboard.setString(state.sessionId);
@@ -24,6 +34,16 @@ export default function WaitingForPlayers() {
         duration: 1000,
       }),
     ]).start();
+  }
+
+  function startTheGame() {
+    // set start session
+    let updateSession = {};
+    updateSession[`sessions/${state.sessionId}/start`] = true;
+
+    update(dbRef, updateSession).then(() => {
+      navigation.navigate("Gameplay");
+    });
   }
 
   return (
@@ -67,10 +87,11 @@ export default function WaitingForPlayers() {
         />
       </TouchableOpacity>
       <Text>Players:</Text>
-      <Text>Shandre</Text>
-      <Text>Roche</Text>
-      <Text>Mendes</Text>
-      <Button textStyles={{ color: "#FFF" }} onPress={() => start()}>
+      {players &&
+        Object.keys(players).map((key) => (
+          <Text key={key}>{players[key].name}</Text>
+        ))}
+      <Button textStyles={{ color: "#FFF" }} onPress={startTheGame}>
         Start
       </Button>
     </LinearGradient>

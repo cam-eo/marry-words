@@ -10,12 +10,9 @@ import { TextInput } from "./TextInput";
 export default function Gameplay({ navigation }) {
   const myTurn = true;
   const waitingForWord = false;
-  // const myTurnComplete = false;
   const [myTurnComplete, setMyTurnComplete] = useState(false);
 
   const countDownDate = new Date() - 60 * 1000;
-
-  // console.log("countDownDate: ", countDownDate.toISOString());
 
   return (
     <LinearGradient

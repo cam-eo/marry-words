@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import Home from "./components/Home";
-import JoinGame from "./components/JoinGame";
+import { JoinGame } from "./components/JoinGame";
 import { StartGame } from "./components/StartGame";
 import WaitingForPlayers from "./components/WaitingForPlayers";
 import { WaitingToStart } from "./components/WaitingToStart";

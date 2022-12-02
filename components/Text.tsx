@@ -7,11 +7,20 @@ interface Props {
   styles?: Object;
 }
 
-export const Text: FC<Props> = ({ children, weight = "Regular", styles }) => {
+export const Text: FC<Props> = ({
+  children,
+  weight = "Regular",
+  styles,
+  ...rest
+}) => {
   const internalStyles = {
     fontFamily: `Kalam-${weight}`,
     ...styles,
   };
 
-  return <ReactNativeText style={internalStyles}>{children}</ReactNativeText>;
+  return (
+    <ReactNativeText style={internalStyles} {...rest}>
+      {children}
+    </ReactNativeText>
+  );
 };
