@@ -48,7 +48,7 @@ export const StartGame: FC<Props> = ({ navigation }) => {
 
     set(sessionRef, {
       players,
-      started: false,
+      start: false,
     });
 
     onDisconnect(sessionRef).remove();

@@ -22,9 +22,11 @@ export const WaitingToStart: FC<Props> = ({ navigation }) => {
     onValue(playersRef, (playersResponse) => {
       setPlayers(playersResponse.val());
     });
-    const sessionStartedRef = ref(db, `sessions/${state.sessionId}/started`);
+    const sessionStartedRef = ref(db, `sessions/${state.sessionId}/start`);
 
     onValue(sessionStartedRef, (sessionStartedResponse) => {
+      console.log("Changed ");
+
       setSessionStarted(sessionStartedResponse.val());
     });
   }, []);

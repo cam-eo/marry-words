@@ -64,7 +64,7 @@ export default function App() {
           <Stack.Screen
             name="Gameplay"
             component={Gameplay}
-            options={{ title: "Play", headerShown: false }}
+            options={{ title: "Gameplay", headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

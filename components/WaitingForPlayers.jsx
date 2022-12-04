@@ -7,10 +7,10 @@ import { Text } from "./Text";
 import { colors } from "../theme";
 import { Button } from "./Button";
 import { useStoreValue } from "../store";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import { db } from "../firebase";
 
-export default function WaitingForPlayers() {
+export default function WaitingForPlayers({ navigation }) {
   const [state, dispatch] = useStoreValue();
   const [fadeAnim] = useState(new Animated.Value(0));
   const [players, setPlayers] = useState();
@@ -27,7 +27,7 @@ export default function WaitingForPlayers() {
     Animated.sequence([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 50,
       }),
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -41,7 +41,10 @@ export default function WaitingForPlayers() {
     let updateSession = {};
     updateSession[`sessions/${state.sessionId}/start`] = true;
 
-    update(dbRef, updateSession).then(() => {
+    // get the last player ID and update dealer in session
+
+    const dbRef = ref(db);
+    update(dbRef, updateSession).then((res) => {
       navigation.navigate("Gameplay");
     });
   }
@@ -125,22 +128,41 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * {
- *    sessions: {
- *      uid: dewvervbadbvdzf,
- *      users: {
- *         userUid: {
- *            name: "Cam",
- *            score: 0,
- *            wordInPlay: "Hello"
- *         }
- *      },
- *      wordInPlay: "Goodbye",
- *      previousWords: {
- *
- *      }
- *    }
- * }
- *
- */
+const sessionDemo = {
+  "uid-fefefefef": {
+    players: {
+      "uid-player1": {
+        name: "Cam",
+        score: 0,
+        wordInPlay: "Hello",
+      },
+      "uid-player2": {
+        name: "Shan",
+        score: 0,
+        wordInPlay: "",
+      },
+      dealer: "player-uid",
+    },
+  },
+};
+
+const sessionDemo2 = {
+  "uid-fefefefef": {
+    players: {
+      "uid-player1": {
+        name: "Cam",
+        score: 0,
+        wordInPlay: "Hello",
+      },
+      "uid-player2": {
+        name: "Shan",
+        score: 0,
+      },
+      dealer: "uid-player1",
+    },
+    marryWords: {
+      "uid-player2": "Goodbye",
+    },
+    winner: "player--uid",
+  },
+};
