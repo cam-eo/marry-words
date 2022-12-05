@@ -16,17 +16,15 @@ interface Props {
 export const WaitingToStart: FC<Props> = ({ navigation }) => {
   const [state] = useStoreValue();
   const [players, setPlayers] = useState();
-  const [sessionStarted, setSessionStarted] = useState(false);
+  const [sessionStarted, setSessionStarted] = useState("");
   useEffect(() => {
     const playersRef = ref(db, `sessions/${state.sessionId}/players`);
     onValue(playersRef, (playersResponse) => {
       setPlayers(playersResponse.val());
     });
-    const sessionStartedRef = ref(db, `sessions/${state.sessionId}/start`);
+    const sessionStartedRef = ref(db, `sessions/${state.sessionId}/dealer`);
 
     onValue(sessionStartedRef, (sessionStartedResponse) => {
-      console.log("Changed ");
-
       setSessionStarted(sessionStartedResponse.val());
     });
   }, []);

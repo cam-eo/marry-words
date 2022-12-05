@@ -7,7 +7,7 @@ import { Text } from "./Text";
 import { colors } from "../theme";
 import { Button } from "./Button";
 import { db } from "../firebase";
-import { ref, set, onDisconnect } from "firebase/database";
+import { ref, set, onDisconnect, child, get } from "firebase/database";
 
 import { useStoreValue } from "../store";
 
@@ -48,11 +48,9 @@ export const StartGame: FC<Props> = ({ navigation }) => {
 
     set(sessionRef, {
       players,
-      start: false,
     });
 
     onDisconnect(sessionRef).remove();
-
     navigation.navigate("WaitingForPlayers");
   }
 

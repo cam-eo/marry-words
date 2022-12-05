@@ -6,6 +6,8 @@ import { JoinGame } from "./components/JoinGame";
 import { StartGame } from "./components/StartGame";
 import WaitingForPlayers from "./components/WaitingForPlayers";
 import { WaitingToStart } from "./components/WaitingToStart";
+import { MarryAWord } from "./components/MarryAWord";
+import { WaitingToPickAWinner } from "./components/WaitingToPickAWinner";
 
 import Gameplay from "./components/Gameplay";
 import { StoreProvider, initialState, reducer } from "./store";
@@ -65,6 +67,16 @@ export default function App() {
             name="Gameplay"
             component={Gameplay}
             options={{ title: "Gameplay", headerShown: false }}
+          />
+          <Stack.Screen
+            name="MarryAWord"
+            component={MarryAWord}
+            options={{ title: "MarryAWord", headerShown: false }}
+          />
+          <Stack.Screen
+            name="WaitingToPickAWinner"
+            component={WaitingToPickAWinner}
+            options={{ title: "WaitingToPickAWinner", headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

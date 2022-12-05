@@ -3,6 +3,11 @@ import { createContext, FC, useContext, useReducer } from "react";
 export const initialState = {
   user: {},
   sessionId: undefined,
+  dealer: {
+    uid: "",
+    name: "",
+  },
+  wordInPlay: "",
 };
 
 // interface State {
@@ -31,6 +36,10 @@ export const reducer = (state, action) => {
       return { ...state, user: action.user };
     case "SET_SESSION":
       return { ...state, sessionId: action.sessionId };
+    case "SET_DEALER":
+      return { ...state, dealer: action.dealer };
+    case "SET_WORD_IN_PLAY":
+      return { ...state, wordInPlay: action.wordInPlay };
     default:
       return state;
   }

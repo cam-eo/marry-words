@@ -39,12 +39,10 @@ export default function WaitingForPlayers({ navigation }) {
   function startTheGame() {
     // set start session
     let updateSession = {};
-    updateSession[`sessions/${state.sessionId}/start`] = true;
-
-    // get the last player ID and update dealer in session
+    updateSession[`sessions/${state.sessionId}/dealer`] = state.user.uid;
 
     const dbRef = ref(db);
-    update(dbRef, updateSession).then((res) => {
+    update(dbRef, updateSession).then(() => {
       navigation.navigate("Gameplay");
     });
   }

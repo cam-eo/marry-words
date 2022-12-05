@@ -7,13 +7,25 @@ import { colors } from "../theme";
 import { Text } from "./Text";
 import { TextInput } from "./TextInput";
 import { db } from "../firebase";
+import { Button } from "./Button";
+import { useStoreValue } from "../store";
+
+import {
+  ref,
+  child,
+  get,
+  update,
+  onDisconnect,
+  onValue,
+} from "firebase/database";
 
 export default function Gameplay({ navigation }) {
-  const myTurn = true;
-  const waitingForWord = false;
-  const [myTurnComplete, setMyTurnComplete] = useState(false);
+  const [myTurn, setMyTurn] = useState(null);
+  const [state, dispatch] = useStoreValue();
 
   const countDownDate = new Date() - 60 * 1000;
+
+  const [word, setWord] = useState("");
 
   useEffect(() => {
     // get the dealer:
@@ -50,7 +62,72 @@ export default function Gameplay({ navigation }) {
     // Waiting for a winner - listen for winner
     // Show winner screen + timeout
     //
+    // const playersRef = ref(db, `sessions/${state.sessionId}/players/${dealer}/wordInPlay`);
+    // onValue(playersRef, (playersResponse) => {
+    //   setWordToMarry(playersResponse.val());
+    // });
+    //
+    // -------------------------------------------------------------
+    //
+    // let updateSession = {};
+    // updateSession[`sessions/${sessionId}/players/${user.uid}`] = {
+    //   name,
+    // };
+    //
+    // update(dbRef, updateSession).then(() => {
+    //   onDisconnect(userToSessionRef).remove();
+    //   navigation.navigate("WaitingToStart");
+    // });
+
+    const dbRef = ref(db);
+    get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
+      dispatch({
+        type: "SET_DEALER",
+        dealer: {
+          uid: res.val().dealer,
+          name: res.val().players[res.val().dealer].name,
+        },
+      });
+
+      if (state.user.uid === res.val().dealer) {
+        setMyTurn(true);
+      }
+
+      if (!myTurn) {
+        const dealerWordRef = ref(
+          db,
+          `sessions/${state.sessionId}/players/${res.val().dealer}/wordInPlay`
+        );
+        onValue(dealerWordRef, (dealerWordResponse) => {
+          dispatch({
+            type: "SET_WORD_IN_PLAY",
+            wordInPlay: dealerWordResponse.val(),
+          });
+
+          if (dealerWordResponse.val()) {
+            navigation.navigate("MarryAWord");
+          }
+        });
+      }
+    });
+
+    // LISTEN FOR WORD
   }, []);
+
+  function submit() {
+    //
+
+    let updateSession = {};
+    updateSession[
+      `sessions/${state.sessionId}/players/${state.user.uid}/wordInPlay`
+    ] = word;
+
+    const dbRef = ref(db);
+
+    update(dbRef, updateSession).then(() => {
+      // navigation.navigate("WaitingToPickAWord");
+    });
+  }
 
   return (
     <LinearGradient
@@ -58,60 +135,35 @@ export default function Gameplay({ navigation }) {
       style={styles.container}
     >
       {myTurn ? (
+        state.dealer.name ? (
+          <>
+            <Text style={styles.typeography}>Type in a word</Text>
+            <TextInput
+              styles={{
+                width: "100%",
+                maxWidth: 300,
+                fontSize: 24,
+                padding: 8,
+                color: "#FFF",
+                textAlign: "center",
+                marginBottom: 24,
+              }}
+              value={word}
+              onChange={(e) => setWord(e.target.value)}
+            />
+            <Button onPress={submit}>Submit</Button>
+          </>
+        ) : (
+          <></>
+        )
+      ) : (
         <>
-          {myTurnComplete ? (
-            <>
-              <Text style={styles.typeography}>Timeout</Text>
-              <Text style={styles.typeography}>
-                Waiting for peeps to select a word
-              </Text>
-              <Text style={styles.typeography}>Results are in</Text>
-              <View style={{ backgroundColor: "#123459" }}>
-                <Text style={styles.typeography}>Word</Text>
-                <Text style={styles.typeography}>Player Name</Text>
-              </View>
-              <View style={{ backgroundColor: "#123459" }}>
-                <Text style={styles.typeography}>Word</Text>
-                <Text style={styles.typeography}>Player Name</Text>
-              </View>
-            </>
-          ) : (
-            <>
-              <Text style={styles.typeography}>Timeout</Text>
-              <Text style={styles.typeography}>
-                Type a word or press the button
-              </Text>
-              <TextInput />
-              <TouchableOpacity style={styles.button}>
-                Generate a word
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setMyTurnComplete(true)}
-                style={styles.button}
-              >
-                Submit
-              </TouchableOpacity>
-            </>
+          {state.dealer.name && (
+            <Text style={styles.typeography}>
+              {`Waiting for ${state.dealer.name} to select a word`}
+            </Text>
           )}
         </>
-      ) : (
-        <View>
-          {waitingForWord ? (
-            <>
-              <Text style={styles.typeography}>
-                Waiting for Shandre to select a word
-              </Text>
-              <Text style={styles.typeography}>Timeout</Text>
-            </>
-          ) : (
-            <>
-              <Text style={styles.typeography}>
-                Waiting for Shandre to select a workd
-              </Text>
-              <Text style={styles.typeography}>Timeout</Text>
-            </>
-          )}
-        </View>
       )}
     </LinearGradient>
   );
@@ -130,6 +182,7 @@ const styles = StyleSheet.create({
   },
   typeography: {
     color: "#FFF",
+    fontSize: 24,
   },
   input: {},
 });
