@@ -6,14 +6,24 @@ import { Text } from "./Text";
 import { TextInput } from "./TextInput";
 import { Button } from "./Button";
 import { useStoreValue } from "../store";
+import { ref, child, get, update, onValue } from "firebase/database";
 
 interface Props {}
 
-export const WaitingToPickAWinner: FC<Props> = () => {
+export const WaitingToPickAWinner: FC<Props> = ({ navigation }) => {
   const [wordToMarry, setWordToMarry] = useState("");
+  const [state, dispatch] = useStoreValue();
 
   function submit() {
     //
+    // let updateSession: any = {};
+    // updateSession[
+    //   `sessions/${state.sessionId}/players/${state.user.uid}/wordInPlay`
+    // ];
+    // const dbRef = ref(db);
+    // update(dbRef, updateSession).then(() => {
+    //   navigation.navigate("WaitingToPickAWinner");
+    // });
   }
 
   return (
@@ -21,23 +31,9 @@ export const WaitingToPickAWinner: FC<Props> = () => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text styles={styles.typeography}>{`The word to marry is: ${""}`}</Text>
-      <TextInput
-        styles={{
-          width: "100%",
-          maxWidth: 300,
-          fontSize: 24,
-          padding: 8,
-          color: "#FFF",
-          textAlign: "center",
-          marginBottom: 24,
-        }}
-        value={wordToMarry}
-        onChange={(e) => setWordToMarry(e.target.value)}
-      />
-      <Button textStyles={{ color: "#FFF", fontSize: 24 }} onPress={submit}>
-        Propose
-      </Button>
+      <Text styles={styles.typeography}>
+        Waiting for players to select a word
+      </Text>
     </LinearGradient>
   );
 };

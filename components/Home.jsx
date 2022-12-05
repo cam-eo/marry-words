@@ -26,8 +26,7 @@ export default function Home({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ...
-        console.log("ERROR: ", { errorCode, errorMessage });
+        console.error("FIREBASE ERROR AUTH'ING: ", { errorCode, errorMessage });
       });
   }, []);
 

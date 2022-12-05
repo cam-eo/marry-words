@@ -45,7 +45,6 @@ export const StartGame: FC<Props> = ({ navigation }) => {
     };
 
     const sessionRef = ref(db, "sessions/" + sessionId);
-
     set(sessionRef, {
       players,
     });

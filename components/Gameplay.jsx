@@ -10,14 +10,7 @@ import { db } from "../firebase";
 import { Button } from "./Button";
 import { useStoreValue } from "../store";
 
-import {
-  ref,
-  child,
-  get,
-  update,
-  onDisconnect,
-  onValue,
-} from "firebase/database";
+import { ref, child, get, update, onValue } from "firebase/database";
 
 export default function Gameplay({ navigation }) {
   const [myTurn, setMyTurn] = useState(null);
@@ -125,7 +118,7 @@ export default function Gameplay({ navigation }) {
     const dbRef = ref(db);
 
     update(dbRef, updateSession).then(() => {
-      // navigation.navigate("WaitingToPickAWord");
+      navigation.navigate("WaitingToPickAWinner");
     });
   }
 

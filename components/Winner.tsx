@@ -28,16 +28,7 @@ export const MarryAWord: FC<Props> = ({ navigation }) => {
   //   useEffect(() => {}, []);
 
   function submit() {
-    let updateSession: any = {};
-    updateSession[
-      `sessions/${state.sessionId}/players/marryWords/${state.user.uid}`
-    ] = wordToMarry;
-
-    const dbRef = ref(db);
-
-    update(dbRef, updateSession).then(() => {
-      navigation.navigate("Winner");
-    });
+    // remove my words
   }
 
   return (
@@ -45,22 +36,7 @@ export const MarryAWord: FC<Props> = ({ navigation }) => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text
-        styles={styles.typeography}
-      >{`The word to marry is: ${state.wordInPlay}`}</Text>
-      <TextInput
-        styles={{
-          width: "100%",
-          maxWidth: 300,
-          fontSize: 24,
-          padding: 8,
-          color: "#FFF",
-          textAlign: "center",
-          marginBottom: 24,
-        }}
-        value={wordToMarry}
-        onChange={(e) => setWordToMarry(e.target.value)}
-      />
+      <Text>List the winners</Text>
       <Button textStyles={{ color: "#FFF", fontSize: 24 }} onPress={submit}>
         Propose
       </Button>
