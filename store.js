@@ -8,6 +8,7 @@ export const initialState = {
     name: "",
   },
   wordInPlay: "",
+  players: {},
 };
 
 // interface State {
@@ -38,8 +39,14 @@ export const reducer = (state, action) => {
       return { ...state, sessionId: action.sessionId };
     case "SET_DEALER":
       return { ...state, dealer: action.dealer };
+    case "SET_GAMEPLAY":
+      return { ...state, dealer: action.dealer, players: action.players };
     case "SET_WORD_IN_PLAY":
       return { ...state, wordInPlay: action.wordInPlay };
+    case "SET_MARRY_WORDS":
+      return { ...state, marryWords: action.marryWords };
+    case "SET_TURN":
+      return { ...state, myTurn: action.myTurn };
     default:
       return state;
   }

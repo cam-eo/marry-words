@@ -25,13 +25,10 @@ export const MarryAWord: FC<Props> = ({ navigation }) => {
 
   const [wordToMarry, setWordToMarry] = useState("");
 
-  //   useEffect(() => {}, []);
-
   function submit() {
     let updateSession: any = {};
-    updateSession[
-      `sessions/${state.sessionId}/players/marryWords/${state.user.uid}`
-    ] = wordToMarry;
+    updateSession[`sessions/${state.sessionId}/marryWords/${state.user.uid}`] =
+      wordToMarry;
 
     const dbRef = ref(db);
 

@@ -75,11 +75,12 @@ export default function Gameplay({ navigation }) {
     const dbRef = ref(db);
     get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
       dispatch({
-        type: "SET_DEALER",
+        type: "SET_GAMEPLAY",
         dealer: {
           uid: res.val().dealer,
           name: res.val().players[res.val().dealer].name,
         },
+        players: res.val().players,
       });
 
       if (state.user.uid === res.val().dealer) {
@@ -109,6 +110,7 @@ export default function Gameplay({ navigation }) {
 
   function submit() {
     //
+    setWord("");
 
     let updateSession = {};
     updateSession[
@@ -118,7 +120,7 @@ export default function Gameplay({ navigation }) {
     const dbRef = ref(db);
 
     update(dbRef, updateSession).then(() => {
-      navigation.navigate("WaitingToPickAWinner");
+      navigation.navigate("PickAWinner");
     });
   }
 
@@ -127,35 +129,31 @@ export default function Gameplay({ navigation }) {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      {myTurn ? (
-        state.dealer.name ? (
-          <>
-            <Text style={styles.typeography}>Type in a word</Text>
-            <TextInput
-              styles={{
-                width: "100%",
-                maxWidth: 300,
-                fontSize: 24,
-                padding: 8,
-                color: "#FFF",
-                textAlign: "center",
-                marginBottom: 24,
-              }}
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-            />
-            <Button onPress={submit}>Submit</Button>
-          </>
-        ) : (
-          <></>
-        )
+      {myTurn && setMyTurn ? (
+        <>
+          <Text style={styles.typeography}>Type in a word</Text>
+          <TextInput
+            styles={{
+              width: "100%",
+              maxWidth: 300,
+              fontSize: 24,
+              padding: 8,
+              color: "#FFF",
+              textAlign: "center",
+              marginBottom: 24,
+            }}
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
+          />
+          <Button onPress={submit}>Submit</Button>
+        </>
       ) : (
         <>
-          {state.dealer.name && (
+          {state.dealer.name ? (
             <Text style={styles.typeography}>
               {`Waiting for ${state.dealer.name} to select a word`}
             </Text>
-          )}
+          ) : null}
         </>
       )}
     </LinearGradient>

@@ -42,6 +42,7 @@ export const StartGame: FC<Props> = ({ navigation }) => {
 
     players[user.uid] = {
       name,
+      score: 0,
     };
 
     const sessionRef = ref(db, "sessions/" + sessionId);

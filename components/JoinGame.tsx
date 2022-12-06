@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme";
-
 import { Text } from "./Text";
 import { TextInput } from "./TextInput";
 import { Button } from "./Button";
@@ -24,8 +23,6 @@ export const JoinGame: FC<Props> = ({ navigation }) => {
   function onSubmit() {
     const dbRef = ref(db);
     get(child(dbRef, `sessions/${sessionId}`)).then((res) => {
-      // console.log("got session: ", res.val());
-
       dispatch({
         type: "SET_SESSION",
         sessionId,
@@ -39,6 +36,7 @@ export const JoinGame: FC<Props> = ({ navigation }) => {
       let updateSession = {};
       updateSession[`sessions/${sessionId}/players/${user.uid}`] = {
         name,
+        score: 0,
       };
 
       update(dbRef, updateSession).then(() => {

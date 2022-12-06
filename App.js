@@ -7,7 +7,8 @@ import { StartGame } from "./components/StartGame";
 import WaitingForPlayers from "./components/WaitingForPlayers";
 import { WaitingToStart } from "./components/WaitingToStart";
 import { MarryAWord } from "./components/MarryAWord";
-import { WaitingToPickAWinner } from "./components/WaitingToPickAWinner";
+import { PickAWinner } from "./components/PickAWinner";
+import { Winner } from "./components/Winner";
 
 import Gameplay from "./components/Gameplay";
 import { StoreProvider, initialState, reducer } from "./store";
@@ -74,9 +75,14 @@ export default function App() {
             options={{ title: "MarryAWord", headerShown: false }}
           />
           <Stack.Screen
-            name="WaitingToPickAWinner"
-            component={WaitingToPickAWinner}
-            options={{ title: "WaitingToPickAWinner", headerShown: false }}
+            name="PickAWinner"
+            component={PickAWinner}
+            options={{ title: "PickAWinner", headerShown: false }}
+          />
+          <Stack.Screen
+            name="Winner"
+            component={Winner}
+            options={{ title: "Winner", headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
