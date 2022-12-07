@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity, Animated } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { LinearGradient } from "expo-linear-gradient";
 import { TextInput } from "./TextInput";
@@ -11,7 +11,7 @@ import { ref, onValue, update } from "firebase/database";
 import { db } from "../firebase";
 
 export default function WaitingForPlayers({ navigation }) {
-  const [state, dispatch] = useStoreValue();
+  const [state] = useStoreValue();
   const [fadeAnim] = useState(new Animated.Value(0));
   const [players, setPlayers] = useState();
 
@@ -28,10 +28,12 @@ export default function WaitingForPlayers({ navigation }) {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 50,
+        useNativeDriver: true,
       }),
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 1000,
+        useNativeDriver: true,
       }),
     ]).start();
   }

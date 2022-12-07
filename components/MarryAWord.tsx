@@ -17,8 +17,11 @@ import {
   onDisconnect,
   onValue,
 } from "firebase/database";
+import { Navigation } from "../types";
 
-interface Props {}
+interface Props {
+  navigation: Navigation;
+}
 
 export const MarryAWord: FC<Props> = ({ navigation }) => {
   const [state, dispatch] = useStoreValue();
@@ -43,14 +46,16 @@ export const MarryAWord: FC<Props> = ({ navigation }) => {
       style={styles.container}
     >
       <Text styles={{ fontSize: 16, marginBottom: 4 }}>
-        {`The word to marry is: `}
-        <Text
-          styles={{
-            backgroundColor: colors.glass,
-            borderRadius: 4,
-            paddingHorizontal: 4,
-          }}
-        >{`${state.wordInPlay}`}</Text>
+        <>
+          {`The word to marry is: `}
+          <Text
+            styles={{
+              backgroundColor: colors.glass,
+              borderRadius: 4,
+              paddingHorizontal: 4,
+            }}
+          >{`${state.wordInPlay}`}</Text>
+        </>
       </Text>
       <TextInput
         styles={{

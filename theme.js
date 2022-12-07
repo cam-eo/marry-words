@@ -7,6 +7,7 @@ export const colors = {
   white: "#FFF",
   black: "#000",
   green: "#ACE1AF",
+  red: "#FF6961",
   glass: "rgba(255, 255, 255, 0.2)",
   greenGlass: "rgba(172,225,175, 0.2)",
 };

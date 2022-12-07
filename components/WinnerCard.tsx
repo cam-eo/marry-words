@@ -3,15 +3,13 @@ import { View, StyleSheet } from "react-native";
 import { Text } from "./Text";
 import { colors } from "../theme";
 import Icon from "react-native-vector-icons/FontAwesome5";
-
-const starSvgAsset = require("../assets/star-outline.svg");
-
 interface Props {
   styles?: Object;
   word: string;
   playerName: string;
   winner: boolean;
   score: number;
+  dealer: boolean;
 }
 
 export const WinnerCard: FC<Props> = ({
@@ -20,6 +18,7 @@ export const WinnerCard: FC<Props> = ({
   winner,
   styles,
   score,
+  dealer,
   ...rest
 }) => {
   const internalStyles = StyleSheet.create({
@@ -27,11 +26,11 @@ export const WinnerCard: FC<Props> = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      width: 150,
+      width: dealer ? "100%" : 150,
       height: 100,
       borderRadius: 16,
-      backgroundColor: winner ? colors.green : colors.glass,
-      border: "1px solid rgba(255, 255, 255, 0.2)",
+      backgroundColor: colors.glass,
+      border: `1px solid ${winner ? colors.green : colors.glass}`,
       boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
       ...styles,
       position: "relative",
@@ -48,7 +47,9 @@ export const WinnerCard: FC<Props> = ({
           width: "100%",
         }}
       >
-        <Text>{word}</Text>
+        <Text weight="Bold" styles={{ color: "#FFFFFF", fontSize: 16 }}>
+          {word}
+        </Text>
       </View>
       <View
         style={{
@@ -104,7 +105,6 @@ export const WinnerCard: FC<Props> = ({
                 justifyContent: "flex-end",
                 fontSize: 32,
               }}
-              stroke={4}
             />
           </View>
         </View>

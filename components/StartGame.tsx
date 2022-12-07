@@ -67,7 +67,11 @@ export const StartGame: FC<Props> = ({ navigation }) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <Button textStyles={{ color: "#FFF", fontSize: 24 }} onPress={startGame}>
+      <Button
+        textStyles={{ color: "#FFF", fontSize: 24 }}
+        onPress={startGame}
+        disabled={!!!name}
+      >
         Start Game
       </Button>
     </LinearGradient>

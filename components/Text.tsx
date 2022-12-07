@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { Text as ReactNativeText } from "react-native";
 
 interface Props {
-  children: string | number;
+  children: string | number | Element;
   weight?: "Bold" | "Regular" | "Light";
   styles?: Object;
 }

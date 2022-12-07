@@ -61,7 +61,11 @@ export const PickAWinner: FC<Props> = ({ navigation }) => {
       {state.marryWords
         ? Object.keys(state.marryWords).map((key) => {
             return (
-              <Button onPress={() => submitWinner(key)} key={key}>
+              <Button
+                onPress={() => submitWinner(key)}
+                key={key}
+                styles={{ marginBottom: 8 }}
+              >
                 {state.marryWords[key]}
               </Button>
             );

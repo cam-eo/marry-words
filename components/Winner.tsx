@@ -16,6 +16,7 @@ interface PlayerWinnerCard {
   name: string;
   word: string;
   score: number;
+  dealer: boolean;
 }
 
 interface Props {
@@ -33,6 +34,7 @@ interface WinnerList {
 export const Winner: FC<Props> = ({ navigation }) => {
   const [state, dispatch] = useStoreValue();
   const [listWinner, setListWinner] = useState<WinnerList[]>([]);
+  const [dealer, setDealer] = useState();
 
   useEffect(() => {
     const winnerRef = ref(db, `sessions/${state.sessionId}/winner`);
@@ -40,21 +42,24 @@ export const Winner: FC<Props> = ({ navigation }) => {
       if (winnerResponse.val()) {
         const dbRef = ref(db);
         get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
-          const winnerList = Object.keys(res.val().marryWords).map(
-            (key: string) => {
-              let obj = { uid: key, word: res.val().marryWords[key] };
+          const winnerList = Object.keys(res.val().players).map((player) => {
+            const playerWithWord = res.val().players[player];
 
-              obj.name = res.val().players[key].name;
-              obj.score = res.val().players[key].score;
-
-              if (res.val().winner === key) {
-                obj.winner = true;
-              } else {
-                obj.winner = false;
-              }
-              return obj;
+            if (res.val().dealer === player) {
+              setDealer(playerWithWord);
             }
-          );
+
+            const marryWord = res.val().marryWords[player];
+
+            if (marryWord) {
+              playerWithWord.word = res.val().marryWords[player];
+            }
+
+            if (res.val().winner === player) playerWithWord.winner = true;
+            if (res.val().dealer === player) playerWithWord.dealer = true;
+
+            return playerWithWord;
+          });
 
           setListWinner(winnerList);
 
@@ -115,22 +120,38 @@ export const Winner: FC<Props> = ({ navigation }) => {
       <View
         style={{
           display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
           width: 320,
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 8,
         }}
       >
+        {dealer ? (
+          <WinnerCard
+            key={dealer.uid}
+            playerName={dealer.name}
+            winner={false}
+            dealer={true}
+            word={dealer.wordInPlay}
+            score={dealer.score}
+            styles={{ marginBottom: 8 }}
+          />
+        ) : null}
         {listWinner.length
-          ? listWinner.map((player: PlayerWinnerCard) => (
-              <WinnerCard
-                key={player.uid}
-                playerName={player.name}
-                winner={player.winner}
-                word={player.word}
-                score={player.score}
-              />
-            ))
+          ? listWinner.map((player: PlayerWinnerCard) =>
+              player.dealer ? null : (
+                <WinnerCard
+                  key={player.uid}
+                  playerName={player.name}
+                  winner={player.winner}
+                  word={player.word}
+                  score={player.score}
+                  dealer={false}
+                  styles={{ marginBottom: 8 }}
+                />
+              )
+            )
           : null}
       </View>
       {listWinner.length && state.dealer.uid === state.user.uid ? (

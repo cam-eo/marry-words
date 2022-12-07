@@ -8,6 +8,7 @@ interface Props {
   styles?: Object;
   textStyles?: Object;
   onPress: () => void;
+  disabled?: boolean;
 }
 
 export const Button: FC<Props> = ({
@@ -16,6 +17,7 @@ export const Button: FC<Props> = ({
   styles,
   textStyles,
   onPress,
+  disabled,
   ...rest
 }) => {
   const internalStyles = StyleSheet.create({
@@ -39,7 +41,12 @@ export const Button: FC<Props> = ({
   });
 
   return (
-    <TouchableOpacity style={internalStyles.button} {...rest} onPress={onPress}>
+    <TouchableOpacity
+      style={internalStyles.button}
+      {...rest}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <Text weight={weight} styles={internalStyles.typeography}>
         {children}
       </Text>
