@@ -90,3 +90,14 @@ export default function App() {
     </StoreProvider>
   );
 }
+
+// Alpha test-1: NOTES
+
+// Same word, join so that both players get the point (TWINSIES)
+// make player name a different colour Waiting for PLAYER to start
+// only show options once everyone has put something through
+// Show the word when picking the proposed words
+// Enable autocorrect on word input
+// Pick 2 inners after 10 points
+// sound
+// End game screen

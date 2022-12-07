@@ -6,10 +6,13 @@ import { StyleSheet } from "react-native";
 import { Text } from "./Text";
 import { Button } from "./Button";
 import { useStoreValue } from "../store";
-import { ref, child, get, update, onValue } from "firebase/database";
+import { ref, update, onValue } from "firebase/database";
 import { db } from "../firebase";
+import { Navigation } from "../types";
 
-interface Props {}
+interface Props {
+  navigation: Navigation;
+}
 
 export const PickAWinner: FC<Props> = ({ navigation }) => {
   const [readyToSelectWinner, setReadyToSelectWinner] = useState(false);
@@ -18,7 +21,6 @@ export const PickAWinner: FC<Props> = ({ navigation }) => {
   useEffect(() => {
     const playersRef = ref(db, `sessions/${state.sessionId}/marryWords`);
     onValue(playersRef, (marryWordsResponse) => {
-      console.log("marryWordsResponse: ", marryWordsResponse.val());
       dispatch({
         type: "SET_MARRY_WORDS",
         marryWords: marryWordsResponse.val(),
@@ -52,7 +54,12 @@ export const PickAWinner: FC<Props> = ({ navigation }) => {
       style={styles.container}
     >
       {readyToSelectWinner ? (
-        <Text styles={styles.typeography}>Pick a winner</Text>
+        <Text styles={styles.typeography}>
+          {`Pick a proposal for `}
+          <Text styles={{ ...styles.typeography, color: colors.secondary }}>
+            {state.wordInPlay}
+          </Text>
+        </Text>
       ) : (
         <Text styles={styles.typeography}>
           Waiting for all players to select a word

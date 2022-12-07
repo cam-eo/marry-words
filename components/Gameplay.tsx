@@ -10,8 +10,6 @@ import { Button } from "./Button";
 import { useStoreValue } from "../store";
 import { ref, child, get, update, onValue } from "firebase/database";
 import { Navigation } from "../types";
-
-// import { useFocusEffect } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 
 interface Props {
@@ -28,8 +26,6 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
   useEffect(() => {
     const dbRef = ref(db);
     get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
-      console.log("SESSION: ", res.val());
-
       dispatch({
         type: "SET_GAMEPLAY",
         dealer: {
@@ -40,8 +36,6 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
       });
 
       if (state.user.uid === res.val().dealer) {
-        console.log("MYID: ", state.user.uid);
-        console.log("DEALERID: ", res.val().dealer);
         setMyTurn(true);
       } else {
         setMyTurn(false);
@@ -66,6 +60,11 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
   function submit() {
     setWord("");
     setMyTurn(null);
+
+    dispatch({
+      type: "SET_WORD_IN_PLAY",
+      wordInPlay: word,
+    });
 
     let updateSession = {};
     updateSession[
@@ -102,7 +101,13 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
             <>
               {state.dealer.name ? (
                 <Text styles={styles.typeography}>
-                  {`Waiting for ${state.dealer.name} to select a word`}
+                  {`Waiting for `}
+                  <Text
+                    styles={{ ...styles.typeography, color: colors.secondary }}
+                  >
+                    {state.dealer.name}
+                  </Text>
+                  <Text styles={styles.typeography}>{` to select a word`}</Text>
                 </Text>
               ) : null}
             </>
