@@ -11,6 +11,9 @@ import { useStoreValue } from "../store";
 import { ref, child, get, update, onValue } from "firebase/database";
 import { Navigation } from "../types";
 
+// import { useFocusEffect } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+
 interface Props {
   navigation: Navigation;
 }
@@ -20,10 +23,13 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
   const [state, dispatch] = useStoreValue();
 
   const [word, setWord] = useState("");
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const dbRef = ref(db);
     get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
+      console.log("SESSION: ", res.val());
+
       dispatch({
         type: "SET_GAMEPLAY",
         dealer: {
@@ -34,10 +40,11 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
       });
 
       if (state.user.uid === res.val().dealer) {
+        console.log("MYID: ", state.user.uid);
+        console.log("DEALERID: ", res.val().dealer);
         setMyTurn(true);
-      }
-
-      if (!myTurn) {
+      } else {
+        setMyTurn(false);
         const dealerWordRef = ref(
           db,
           `sessions/${state.sessionId}/players/${res.val().dealer}/wordInPlay`
@@ -54,10 +61,11 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
         });
       }
     });
-  }, []);
+  }, [isFocused]);
 
   function submit() {
     setWord("");
+    setMyTurn(null);
 
     let updateSession = {};
     updateSession[
@@ -76,27 +84,31 @@ export const Gameplay: FC<Props> = function ({ navigation }) {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      {myTurn ? (
+      {state.dealer ? (
         <>
-          <Text styles={{ fontSize: 16 }}>Type in a word</Text>
-          <TextInput
-            styles={{
-              marginBottom: 24,
-            }}
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-          />
-          <Button onPress={submit}>Submit</Button>
+          {myTurn ? (
+            <>
+              <Text styles={{ fontSize: 16 }}>Type in a word</Text>
+              <TextInput
+                styles={{
+                  marginBottom: 24,
+                }}
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+              />
+              <Button onPress={submit}>Submit</Button>
+            </>
+          ) : (
+            <>
+              {state.dealer.name ? (
+                <Text styles={styles.typeography}>
+                  {`Waiting for ${state.dealer.name} to select a word`}
+                </Text>
+              ) : null}
+            </>
+          )}
         </>
-      ) : (
-        <>
-          {state.dealer.name ? (
-            <Text styles={styles.typeography}>
-              {`Waiting for ${state.dealer.name} to select a word`}
-            </Text>
-          ) : null}
-        </>
-      )}
+      ) : null}
     </LinearGradient>
   );
 };

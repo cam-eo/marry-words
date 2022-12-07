@@ -30,6 +30,8 @@ export default function App() {
         WaitingToStart: "waiting-to-start",
         JoinGame: "/join",
         Gameplay: "/play",
+        MarryAWord: "/marry-a-word",
+        PickAWinner: "/pick-a-word",
       },
     },
   };

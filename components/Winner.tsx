@@ -15,6 +15,7 @@ interface PlayerWinnerCard {
   winner: boolean;
   name: string;
   word: string;
+  score: number;
 }
 
 interface Props {
@@ -30,9 +31,8 @@ interface WinnerList {
 }
 
 export const Winner: FC<Props> = ({ navigation }) => {
-  const [state] = useStoreValue();
+  const [state, dispatch] = useStoreValue();
   const [listWinner, setListWinner] = useState<WinnerList[]>([]);
-  const [dealer, setDealer] = useState("");
 
   useEffect(() => {
     const winnerRef = ref(db, `sessions/${state.sessionId}/winner`);
@@ -40,8 +40,6 @@ export const Winner: FC<Props> = ({ navigation }) => {
       if (winnerResponse.val()) {
         const dbRef = ref(db);
         get(child(dbRef, `sessions/${state.sessionId}`)).then((res) => {
-          //
-          setDealer(res.val().dealer);
           const winnerList = Object.keys(res.val().marryWords).map(
             (key: string) => {
               let obj = { uid: key, word: res.val().marryWords[key] };
@@ -63,7 +61,10 @@ export const Winner: FC<Props> = ({ navigation }) => {
           const winnerRef = ref(db, `sessions/${state.sessionId}/winner`);
 
           onValue(winnerRef, (winnerResponse) => {
-            if (!winnerResponse.val()) navigation.navigate("Gameplay");
+            if (!winnerResponse.val()) {
+              dispatch("SET_DEALER", { dealer: null });
+              navigation.navigate("Gameplay");
+            }
           });
         });
       }
@@ -75,7 +76,7 @@ export const Winner: FC<Props> = ({ navigation }) => {
       .sort()
       .indexOf(state.user.uid);
 
-    console.log("myIndex: ", myIndex);
+    dispatch("SET_DEALER", { dealer: null });
 
     let nextPlayerIndex = myIndex + 1;
 
@@ -132,7 +133,7 @@ export const Winner: FC<Props> = ({ navigation }) => {
             ))
           : null}
       </View>
-      {listWinner.length && dealer === state.user.uid ? (
+      {listWinner.length && state.dealer.uid === state.user.uid ? (
         <Button onPress={startNextRound}>start next round</Button>
       ) : null}
     </LinearGradient>
