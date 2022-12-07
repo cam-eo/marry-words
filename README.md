@@ -8,7 +8,8 @@ Maybe run `sudo npm install expo-cli -g`
 
 ## Third Party Packages
 
-`expo-linear-gradient`
+[`expo-linear-gradient`](https://docs.expo.dev/versions/latest/sdk/linear-gradient/)
+[`react-native-vector-icons`](https://docs.expo.dev/guides/icons/)
 
 ## Fonts
 

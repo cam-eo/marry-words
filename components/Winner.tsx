@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../theme";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text } from "./Text";
 import { Button } from "./Button";
 import { WinnerCard } from "./WinnerCard";
@@ -26,13 +26,11 @@ interface WinnerList {
   word: string;
   winner: boolean;
   name: string;
+  score: number;
 }
 
 export const Winner: FC<Props> = ({ navigation }) => {
   const [state] = useStoreValue();
-
-  console.log("state.players: ", state.players);
-
   const [listWinner, setListWinner] = useState<WinnerList[]>([]);
   const [dealer, setDealer] = useState("");
 
@@ -49,6 +47,8 @@ export const Winner: FC<Props> = ({ navigation }) => {
               let obj = { uid: key, word: res.val().marryWords[key] };
 
               obj.name = res.val().players[key].name;
+              obj.score = res.val().players[key].score;
+
               if (res.val().winner === key) {
                 obj.winner = true;
               } else {
@@ -71,7 +71,9 @@ export const Winner: FC<Props> = ({ navigation }) => {
   }, []);
 
   function startNextRound() {
-    const myIndex: number = Object.keys(state.players).indexOf(state.user.uid);
+    const myIndex: number = Object.keys(state.players)
+      .sort()
+      .indexOf(state.user.uid);
 
     console.log("myIndex: ", myIndex);
 
@@ -109,16 +111,27 @@ export const Winner: FC<Props> = ({ navigation }) => {
       ) : (
         <Text styles={styles.typeography}>Waiting for winner</Text>
       )}
-      {listWinner.length
-        ? listWinner.map((player: PlayerWinnerCard) => (
-            <WinnerCard
-              key={player.uid}
-              playerName={player.name}
-              winner={player.winner}
-              word={player.word}
-            />
-          ))
-        : null}
+      <View
+        style={{
+          display: "flex",
+          width: 320,
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 8,
+        }}
+      >
+        {listWinner.length
+          ? listWinner.map((player: PlayerWinnerCard) => (
+              <WinnerCard
+                key={player.uid}
+                playerName={player.name}
+                winner={player.winner}
+                word={player.word}
+                score={player.score}
+              />
+            ))
+          : null}
+      </View>
       {listWinner.length && dealer === state.user.uid ? (
         <Button onPress={startNextRound}>start next round</Button>
       ) : null}
