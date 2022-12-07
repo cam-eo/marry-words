@@ -4,18 +4,11 @@ import { colors } from "../theme";
 import { StyleSheet } from "react-native";
 import { Text } from "./Text";
 import { Button } from "./Button";
+import { WinnerCard } from "./WinnerCard";
 import { useStoreValue } from "../store";
-
 import { db } from "../firebase";
-
-import {
-  ref,
-  child,
-  get,
-  update,
-  onDisconnect,
-  onValue,
-} from "firebase/database";
+import { ref, child, get, update, onValue } from "firebase/database";
+import { Navigation } from "../types";
 
 interface PlayerWinnerCard {
   uid: string;
@@ -24,14 +17,23 @@ interface PlayerWinnerCard {
   word: string;
 }
 
-interface Props {}
+interface Props {
+  navigation: Navigation;
+}
+
+interface WinnerList {
+  uid: string;
+  word: string;
+  winner: boolean;
+  name: string;
+}
 
 export const Winner: FC<Props> = ({ navigation }) => {
-  const [state, dispatch] = useStoreValue();
+  const [state] = useStoreValue();
 
   console.log("state.players: ", state.players);
 
-  const [listWinner, setListWinner] = useState([]);
+  const [listWinner, setListWinner] = useState<WinnerList[]>([]);
   const [dealer, setDealer] = useState("");
 
   useEffect(() => {
@@ -81,11 +83,6 @@ export const Winner: FC<Props> = ({ navigation }) => {
 
     let updatedSession = {};
 
-    console.log(
-      "Object.keys(state.players)[nextPlayerIndex]",
-      Object.keys(state.players)[nextPlayerIndex]
-    );
-
     updatedSession[`sessions/${state.sessionId}/marryWords/`] = null;
     updatedSession[`sessions/${state.sessionId}/dealer/`] = Object.keys(
       state.players
@@ -94,8 +91,6 @@ export const Winner: FC<Props> = ({ navigation }) => {
     updatedSession[
       `sessions/${state.sessionId}/players/${state.user.uid}/wordInPlay`
     ] = null;
-
-    console.log("updatedSession: ", updatedSession);
 
     const dbRef = ref(db);
 
@@ -110,16 +105,18 @@ export const Winner: FC<Props> = ({ navigation }) => {
       style={styles.container}
     >
       {listWinner.length ? (
-        <Text>Winners</Text>
+        <Text styles={styles.typeography}>Winners</Text>
       ) : (
-        <Text>Waiting for winner</Text>
+        <Text styles={styles.typeography}>Waiting for winner</Text>
       )}
       {listWinner.length
         ? listWinner.map((player: PlayerWinnerCard) => (
-            <Text
-              styles={{ backgroundColor: player.winner ? "green" : "white" }}
+            <WinnerCard
               key={player.uid}
-            >{`${player.name} -> ${player.word}`}</Text>
+              playerName={player.name}
+              winner={player.winner}
+              word={player.word}
+            />
           ))
         : null}
       {listWinner.length && dealer === state.user.uid ? (
@@ -142,6 +139,7 @@ const styles = StyleSheet.create({
   },
   typeography: {
     color: "#FFF",
+    fontSize: 24,
   },
   input: {},
 });

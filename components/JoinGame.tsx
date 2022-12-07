@@ -6,7 +6,8 @@ import { TextInput } from "./TextInput";
 import { Button } from "./Button";
 import { ref, child, get, update, onDisconnect } from "firebase/database";
 import { db } from "../firebase";
-import { FC, useState } from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { useStoreValue } from "../store";
 import { Navigation } from "../types";
 
@@ -45,8 +46,6 @@ export const JoinGame: FC<Props> = ({ navigation }) => {
         navigation.navigate("WaitingToStart");
       });
     });
-
-    // Error Message on not SessionId Available
   }
 
   return (
@@ -54,19 +53,21 @@ export const JoinGame: FC<Props> = ({ navigation }) => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text styles={styles.typeography}>Enter the code to join a game</Text>
+      <Text styles={{ fontSize: 16 }}>Enter the code to join a game</Text>
       <TextInput
         value={sessionId}
         onChange={(e) => setSessionId(e.target.value)}
         styles={styles.input}
       />
-      <Text styles={styles.typeography}>What is your name?</Text>
+      <Text styles={{ fontSize: 16, marginTop: 12 }}>What is your name?</Text>
       <TextInput
         value={name}
         onChange={(e) => setName(e.target.value)}
         styles={styles.input}
       />
-      <Button onPress={onSubmit}>Join</Button>
+      <Button styles={{ marginTop: 20 }} onPress={onSubmit}>
+        Join
+      </Button>
     </LinearGradient>
   );
 };

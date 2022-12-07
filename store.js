@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 export const initialState = {
   user: {},

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { Text as ReactNativeText } from "react-native";
 
 interface Props {

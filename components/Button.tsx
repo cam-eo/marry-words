@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { TouchableOpacity } from "react-native";
+import type { FC } from "react";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { Text } from "./Text";
 
 interface Props {
@@ -18,23 +18,29 @@ export const Button: FC<Props> = ({
   onPress,
   ...rest
 }) => {
-  const internalStyles = {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 200,
-    maxHeight: 100,
-    borderRadius: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer",
-    ...styles,
-  };
+  const internalStyles = StyleSheet.create({
+    button: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: 200,
+      height: 100,
+      borderRadius: 16,
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+      border: "1px solid rgba(255, 255, 255, 0.3)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      cursor: "pointer",
+      ...styles,
+    },
+    typeography: {
+      fontSize: 24,
+      color: "#FFFFFF",
+    },
+  });
 
   return (
-    <TouchableOpacity style={internalStyles} {...rest} onPress={onPress}>
-      <Text weight={weight} styles={textStyles}>
+    <TouchableOpacity style={internalStyles.button} {...rest} onPress={onPress}>
+      <Text weight={weight} styles={internalStyles.typeography}>
         {children}
       </Text>
     </TouchableOpacity>

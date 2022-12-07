@@ -1,14 +1,12 @@
 import { useEffect } from "react";
-
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { Text } from "./Text";
 import { colors } from "../theme";
-
 import { signInAnonymously } from "firebase/auth";
 import { auth } from "../firebase";
 import { useStoreValue } from "../store";
+import { Button } from "./Button";
 
 export default function Home({ navigation }) {
   const [, dispatch] = useStoreValue();
@@ -35,23 +33,15 @@ export default function Home({ navigation }) {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text style={styles.typeography}>Marry Words</Text>
-      <TouchableOpacity
+      <Text styles={styles.typeography}>W'atrimony</Text>
+      <Button
+        styles={{ marginBottom: 12 }}
         onPress={() => navigation.navigate("StartGame")}
-        style={styles.button}
       >
-        <Text weight="Bold" styles={styles.typeography}>
-          Start Game
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("JoinGame")}
-        style={styles.button}
-      >
-        <Text weight="Bold" styles={styles.typeography}>
-          Join Game
-        </Text>
-      </TouchableOpacity>
+        Start Game
+      </Button>
+
+      <Button onPress={() => navigation.navigate("JoinGame")}>Join Game</Button>
     </LinearGradient>
   );
 }
@@ -59,7 +49,6 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#FFE3EA",
     alignItems: "center",
     justifyContent: "center",
     minWidth: "200px",

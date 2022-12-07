@@ -9,8 +9,7 @@ import { WaitingToStart } from "./components/WaitingToStart";
 import { MarryAWord } from "./components/MarryAWord";
 import { PickAWinner } from "./components/PickAWinner";
 import { Winner } from "./components/Winner";
-
-import Gameplay from "./components/Gameplay";
+import { Gameplay } from "./components/Gameplay";
 import { StoreProvider, initialState, reducer } from "./store";
 
 export default function App() {

@@ -40,11 +40,13 @@ export const WaitingToStart: FC<Props> = ({ navigation }) => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text>Waiting for host to start</Text>
-      <Text>Players:</Text>
+      <Text styles={styles.typeography}>Waiting for host to start</Text>
+      <Text styles={{ fontSize: 16 }}>Players:</Text>
       {players &&
         Object.keys(players).map((key) => (
-          <Text key={key}>{players[key].name}</Text>
+          <Text styles={styles.typeography} key={key}>
+            {players[key].name}
+          </Text>
         ))}
     </LinearGradient>
   );
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
   },
   typeography: {
     color: "#FFF",
+    fontSize: 24,
   },
   input: {
     backgroundColor: "#FFF",

@@ -19,6 +19,12 @@ export const TextInput: FC<Props> = ({
     outline: "none",
     fontFamily: `Kalam-${weight}`,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
+    width: "100%",
+    maxWidth: 300,
+    fontSize: 24,
+    padding: 8,
+    color: "#FFF",
+    textAlign: "center",
     ...styles,
   };
 

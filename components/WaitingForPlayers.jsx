@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Animated } from "react-native";
+import { StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { useEffect, useState } from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -37,7 +37,6 @@ export default function WaitingForPlayers({ navigation }) {
   }
 
   function startTheGame() {
-    // set start session
     let updateSession = {};
     updateSession[`sessions/${state.sessionId}/dealer`] = state.user.uid;
 
@@ -52,7 +51,7 @@ export default function WaitingForPlayers({ navigation }) {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text>Share this code with your friends</Text>
+      <Text styles={{ fontSize: 16 }}>Share this code with your friends</Text>
       <TouchableOpacity
         style={{
           position: "relative",
@@ -74,23 +73,20 @@ export default function WaitingForPlayers({ navigation }) {
         >
           <Text>Copied</Text>
         </Animated.View>
-
         <TextInput
           styles={{
-            width: "100%",
-            fontSize: 24,
-            padding: 8,
-            color: "#FFF",
-            textAlign: "center",
+            marginBottom: 12,
           }}
           value={state.sessionId}
           disabled
         />
       </TouchableOpacity>
-      <Text>Players:</Text>
+      <Text styles={{ fontSize: 16 }}>Players:</Text>
       {players &&
         Object.keys(players).map((key) => (
-          <Text key={key}>{players[key].name}</Text>
+          <Text styles={styles.typeography} key={key}>
+            {players[key].name}
+          </Text>
         ))}
       <Button textStyles={{ color: "#FFF" }} onPress={startTheGame}>
         Start
@@ -120,47 +116,9 @@ const styles = StyleSheet.create({
   },
   typeography: {
     color: "#FFF",
+    fontSize: 24,
   },
   input: {
     backgroundColor: "#FFF",
   },
 });
-
-const sessionDemo = {
-  "uid-fefefefef": {
-    players: {
-      "uid-player1": {
-        name: "Cam",
-        score: 0,
-        wordInPlay: "Hello",
-      },
-      "uid-player2": {
-        name: "Shan",
-        score: 0,
-        wordInPlay: "",
-      },
-      dealer: "player-uid",
-    },
-  },
-};
-
-const sessionDemo2 = {
-  "uid-fefefefef": {
-    players: {
-      "uid-player1": {
-        name: "Cam",
-        score: 0,
-        wordInPlay: "Hello",
-      },
-      "uid-player2": {
-        name: "Shan",
-        score: 0,
-      },
-      dealer: "uid-player1",
-    },
-    marryWords: {
-      "uid-player2": "Goodbye",
-    },
-    winner: "player--uid",
-  },
-};

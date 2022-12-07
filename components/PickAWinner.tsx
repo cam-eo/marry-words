@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   },
   typeography: {
     color: "#FFF",
+    fontSize: 24,
   },
   input: {},
 });

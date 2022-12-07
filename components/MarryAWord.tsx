@@ -42,9 +42,16 @@ export const MarryAWord: FC<Props> = ({ navigation }) => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text
-        styles={styles.typeography}
-      >{`The word to marry is: ${state.wordInPlay}`}</Text>
+      <Text styles={{ fontSize: 16, marginBottom: 4 }}>
+        {`The word to marry is: `}
+        <Text
+          styles={{
+            backgroundColor: colors.glass,
+            borderRadius: 4,
+            paddingHorizontal: 4,
+          }}
+        >{`${state.wordInPlay}`}</Text>
+      </Text>
       <TextInput
         styles={{
           width: "100%",

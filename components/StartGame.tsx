@@ -59,16 +59,10 @@ export const StartGame: FC<Props> = ({ navigation }) => {
       colors={[colors.primaryLight, colors.primary, colors.primaryDark]}
       style={styles.container}
     >
-      <Text styles={styles.typeography}>What is your name</Text>
+      <Text styles={{ fontSize: 16 }}>What is your name</Text>
       <TextInput
         styles={{
-          width: "100%",
-          maxWidth: 300,
-          fontSize: 24,
-          padding: 8,
-          color: "#FFF",
-          textAlign: "center",
-          marginBottom: 24,
+          marginBottom: 16,
         }}
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -88,10 +82,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minWidth: "200px",
     width: "100%",
-  },
-  typeography: {
-    color: "#FFF",
-    fontSize: 24,
   },
   input: {
     backgroundColor: "#FFF",
